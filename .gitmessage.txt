@@ -1,0 +1,21 @@
+# =========================================
+# Commit Message Template for TaskFlow
+# =========================================
+# type: feat | fix | docs | style | refactor | perf | test | build | ci | chore | revert
+# subject: 명령형으로 50자 이내 작성 (마침표 X)
+# =========================================
+
+<type>: <subject>
+
+# (선택) 상세 설명 본문 – "왜" 이 변경이 필요한지 작성
+# 한 줄은 72자 이하로 작성할 것.
+# 예시:
+# - Add POST /tasks endpoint for task creation
+# - Reduce unnecessary DB calls and improve performance
+#
+# 줄을 비워두면 body는 생략됩니다.
+
+
+# (선택) Footer
+# - Breaking change 설명
+# - Issue 번호 닫기: Closes #123
