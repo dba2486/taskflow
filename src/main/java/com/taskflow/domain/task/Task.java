@@ -24,6 +24,8 @@ public class Task extends BaseEntity {
     private String title;
 
     @Column(columnDefinition = "TEXT")
+    private String description;
+
     private LocalDateTime dueDate;
 
     @Column(nullable = false)
