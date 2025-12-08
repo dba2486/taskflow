@@ -32,4 +32,8 @@ public class Category extends BaseEntity {
     // Category - Task (1:N)
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Task> tasks = new ArrayList<>();
+
+    public void updateName(String name) {
+        this.name = name;
+    }
 }
