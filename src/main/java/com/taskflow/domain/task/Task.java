@@ -47,4 +47,17 @@ public class Task extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+
+    public void updateTask(String title, String description, Integer priority, String status, LocalDateTime dueDate) {
+        this.title = title;
+        this.description = description;
+        this.priority = priority;
+        this.status = status;
+        this.dueDate = dueDate;
+    }
+
+    public void softDelete() {
+        this.deleted = true;
+    }
 }
