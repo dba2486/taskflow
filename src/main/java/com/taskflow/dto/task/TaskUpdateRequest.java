@@ -17,7 +17,7 @@ public class TaskUpdateRequest {
 
     private String description;
 
-    @NotBlank(message = "우선순위는 필수입니다.")
+    @NotNull(message = "우선순위는 필수입니다.")
     private Integer priority;
 
     @NotBlank(message = "업무 상태는 필수입니다.")
