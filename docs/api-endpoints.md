@@ -15,38 +15,319 @@ TaskFlow 프로젝트의 v0.1.0 기준 API 엔드포인트 목록입니다.
 
 ---
 
-## Users (유저)
+## Users (사용자)
 
-| Method | Endpoint    | Description      |
-|--------|-------------|------------------|
-| GET    | `/users/me` | 내 정보 조회          |
-| PATCH  | `/users/me` | 사용자 정보 일부 수정(선택) |
+| Method | Endpoint      | Description   |
+|--------|---------------|---------------|
+| POST   | `/users`      | 회원 가입(사용자 생성) |
+| GET    | `/users/{id}` | 사용자 단건 조회     |
 
 ---
 
-## Tasks (업무)
+### 1.1 POST `/users` — 회원가입(사용자 생성)
 
-| Method | Endpoint                 | Description          |
-|--------|--------------------------|----------------------|
-| GET    | `/tasks`                 | Task 목록 조회           |
-| POST   | `/tasks`                 | Task 생성              |
-| GET    | `/tasks/{taskId}`        | Task 상세 조회           |
-| PUT    | `/tasks/{taskId}`        | Task 전체 수정           |
-| PATCH  | `/tasks/{taskId}`        | Task 일부 수정           |
-| PATCH  | `/tasks/{taskId}/status` | Task 상태 변경 (완료/미완료)  |
-| DELETE | `/tasks/{taskId}`        | Task 삭제(Soft Delete) |
+#### Request Body
+
+```json
+{
+  "name": "테스트사용자",
+  "email": "test@example.com",
+  "password": "1234"
+}
+```
+
+#### Response
+
+```json
+{
+  "id": 1,
+  "name": "테스트사용자",
+  "email": "test@example.com"
+}
+```
+
+---
+
+### 1.2 GET `/users/{id}` — 사용자 단건 조회
+
+#### Path Parameter
+
+- `id`: 조회할 사용자 ID
+
+#### Response
+
+```json
+{
+  "id": 1,
+  "name": "테스트사용자",
+  "email": "test@example.com"
+}
+```
 
 ---
 
 ## Categories (카테고리)
 
-| Method | Endpoint                   | Description |
-|--------|----------------------------|-------------|
-| GET    | `/categories`              | 카테고리 목록 조회  |
-| POST   | `/categories`              | 카테고리 생성     |
-| GET    | `/categories/{categoryId}` | 카테고리 상세 조회  |
-| PUT    | `/categories/{categoryId}` | 카테고리 수정     |
-| DELETE | `/categories/{categoryId}` | 카테고리 삭제     |
+| Method | Endpoint                     | Description        |
+|--------|------------------------------|--------------------|
+| POST   | `/users/{userId}/categories` | 카테고리 생성            |
+| GET    | `/users/{userId}/categories` | 특정 사용자의 카테고리 목록 조회 |
+| GET    | `/categories/{categoryId}`   | 카테고리 단건 조회         |
+| PATCH  | `/categories/{categoryId}`   | 카테고리 이름 수정         |
+| DELETE | `/categories/{categoryId}`   | 카테고리 삭제            |
+
+---
+
+### 2.1 POST `/users/{userId}/categories` — 카테고리 생성
+
+#### Path Parameter
+
+- `userId`: 카테고리를 소유한 사용자 ID
+
+#### Request Body#
+
+```json
+{
+  "name": "테스트 카테고리"
+}
+```
+
+#### Response
+
+```json
+{
+  "id": 2,
+  "name": "테스트 카테고리"
+}
+```
+
+---
+
+### 2.2 GET `/users/{userId}/categories` — 특정 사용자의 카테고리 목록 조회
+
+#### Path Parameter
+
+- `userId`: 사용자 ID
+
+#### Response
+
+```json
+[
+  {
+    "id": 1,
+    "name": "일반 카테고리"
+  },
+  {
+    "id": 2,
+    "name": "테스트 카테고리"
+  }
+]
+```
+
+---
+
+### 2.3 GET `/categories/{categoryId}` — 카테고리 단건 조회
+
+#### Path Parameter
+
+- `categoryId`: 조회할 카테고리 ID
+
+#### Response
+
+```json
+{
+  "id": 1,
+  "name": "일반 카테고리"
+}
+```
+
+---
+
+### 2.4 PATCH `/categories/{categoryId}` — 카테고리 이름 수정
+
+#### Path Parameter
+
+- `categoryId`: 수정할 카테고리 ID
+
+#### Request Body
+
+```json
+{
+  "name": "변경된 카테고리"
+}
+```
+
+#### Response
+
+```json
+{
+  "id": 1,
+  "name": "변경된 카테고리"
+}
+```
+
+---
+
+### 2.5 DELETE `/categories/{categoryId}` — 카테고리 삭제
+
+#### Path Parameter
+
+- `categoryId`: 삭제할 카테고리 ID
+
+#### Response
+
+```json
+{
+  "success": true
+}
+```
+
+---
+
+## Tasks (업무)
+
+| Method | Endpoint                | Description        |
+|--------|-------------------------|--------------------|
+| POST   | `/users/{userId}/tasks` | 업무 생성              |
+| GET    | `/users/{userId}/tasks` | 특정 사용자의 모든 업무 조회   |
+| GET    | `/tasks/{taskId}`       | 업무 단건 조회           |
+| PATCH  | `/tasks/{taskId}`       | 업무 수정              |
+| DELETE | `/tasks/{taskId}`       | 업무 삭제(Soft Delete) |
+
+---
+
+### 3.1 POST `/users/{userId}/tasks` — 업무 생성
+
+#### Path Parameter
+
+- `userId`: 업무를 생성할 사용자 ID
+
+#### Request Body
+
+```json
+{
+  "title": "테스트업무",
+  "description": "업무에 대한 설명",
+  "priority": 1,
+  "status": "TODO",
+  "dueDate": "2025-12-10",
+  "categoryId": 2
+}
+```
+
+#### Response
+
+```json
+{
+  "id": 5,
+  "title": "테스트업무",
+  "description": "업무에 대한 설명",
+  "priority": 1,
+  "status": "TODO",
+  "dueDate": "2025-12-10",
+  "categoryId": 2
+}
+```
+
+---
+
+### 3.2 GET `/users/{userId}/tasks` — 사용자의 전체 할 일 조회
+
+#### Path Parameter
+
+- `userId`: 업무를 조회할 사용자 ID
+
+#### Response
+
+```json
+[
+  {
+    "id": 5,
+    "title": "테스트업무",
+    "description": "업무에 대한 설명",
+    "priority": 1,
+    "status": "TODO",
+    "dueDate": "2025-12-10",
+    "categoryId": 2
+  }
+]
+```
+
+---
+
+### 3.3 GET `/tasks/{taskId}` — 업무 단건 조회
+
+#### Path Parameter
+
+- `taskId`: 조회할 업무 ID
+
+#### Response
+
+```json
+[
+  {
+    "id": 5,
+    "title": "테스트업무",
+    "description": "업무에 대한 설명",
+    "priority": 1,
+    "status": "TODO",
+    "dueDate": "2025-12-10",
+    "categoryId": 2
+  }
+]
+```
+
+---
+
+### 3.4 PATCH `/tasks/{taskId}` — 업무 수정
+
+#### Path Parameter
+
+- `taskId`: 수정할 업무 ID
+
+#### Request Body
+
+```json
+{
+  "title": "수정 테스트업무",
+  "description": "수정된 업무에 대한 설명",
+  "priority": 3,
+  "status": "IN_PROGRESS",
+  "dueDate": "2025-12-15"
+}
+```
+
+#### Response
+
+```json
+[
+  {
+    "id": 5,
+    "title": "수정 테스트업무",
+    "description": "수정된 업무에 대한 설명",
+    "priority": 3,
+    "status": "IN_PROGRESS",
+    "dueDate": "2025-12-15",
+    "categoryId": 2
+  }
+]
+```
+
+---
+
+### 2.5 DELETE `/tasks/{taskId}` — 업무 삭제
+
+#### Path Parameter
+
+- `taskId`: 삭제할 업무 ID
+
+#### Response
+
+```json
+{
+  "success": true
+}
+```
 
 ---
 
@@ -62,6 +343,15 @@ TaskFlow 프로젝트의 v0.1.0 기준 API 엔드포인트 목록입니다.
 ---
 
 # Version History
+
+## [v0.2.0] — 2025-12-08
+
+### Added
+
+- User/Category/Task 전체 엔드포인트 상세 버전 작성
+- Request/Response JSON 샘플 추가
+
+---
 
 ## [v0.1.0] — 2025-12-05
 
