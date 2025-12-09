@@ -1,6 +1,5 @@
 package com.taskflow.dto.user;
 
-import com.taskflow.domain.user.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -28,14 +27,6 @@ public class UserRegisterRequest {
         this.name = name;
         this.email = email;
         this.password = password;
-    }
-
-    public User to(){
-        return User.builder()
-                .name(name)
-                .email(email)
-                .password(password)
-                .build();
     }
 
 }
