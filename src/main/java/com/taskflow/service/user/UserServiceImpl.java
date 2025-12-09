@@ -4,6 +4,7 @@ import com.taskflow.domain.user.User;
 import com.taskflow.domain.user.UserRepository;
 import com.taskflow.dto.user.UserRegisterRequest;
 import com.taskflow.dto.user.UserResponse;
+import com.taskflow.dto.user.UserUpdateRequest;
 import com.taskflow.global.exception.CustomException;
 import com.taskflow.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public UserResponse register(UserRegisterRequest request) {
 
         // email 중복 체크 (추가 구현 예정)
@@ -32,7 +34,7 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         User saved = userRepository.save(user);
-        return new UserResponse(saved);
+        return UserResponse.from(saved);
     }
 
     @Override
@@ -41,6 +43,30 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        return new UserResponse(user);
+        return UserResponse.from(user);
+    }
+
+    @Override
+    @Transactional
+    public UserResponse updateUser(Long userId, UserUpdateRequest request) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 이름 변경
+        user.updateName(request.getName());
+
+        // 비밀번호 변경
+        user.updatePassword(request.getPassword());
+
+        return UserResponse.from(user);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        userRepository.delete(user);
     }
 }
