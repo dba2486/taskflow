@@ -4,7 +4,7 @@ import com.taskflow.domain.category.Category;
 import com.taskflow.domain.category.CategoryRepository;
 import com.taskflow.domain.user.User;
 import com.taskflow.domain.user.UserRepository;
-import com.taskflow.dto.category.CategoryCreateRequest;
+import com.taskflow.dto.category.CategoryRequest;
 import com.taskflow.dto.category.CategoryResponse;
 import com.taskflow.global.exception.CustomException;
 import com.taskflow.global.exception.ErrorCode;
@@ -24,7 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public CategoryResponse createCategory(Long userId, CategoryCreateRequest request) {
+    public CategoryResponse createCategory(Long userId, CategoryRequest request) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category saved = categoryRepository.save(category);
 
-        return new CategoryResponse(saved);
+        return CategoryResponse.from(saved);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        return categoryRepository.findByUser(user).stream().map(CategoryResponse::new).toList();
+        return CategoryResponse.fromList(categoryRepository.findByUser(user));
     }
 
     @Override
@@ -54,18 +54,18 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
 
-        return new CategoryResponse(category);
+        return CategoryResponse.from(category);
     }
 
     @Override
     @Transactional
-    public CategoryResponse updateCategory(Long categoryId, String newName) {
+    public CategoryResponse updateCategory(Long categoryId, CategoryRequest request) {
 
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
 
-        category.updateName(newName);
-        return new CategoryResponse(category);
+        category.updateName(request.getName());
+        return CategoryResponse.from(category);
     }
 
     @Override
