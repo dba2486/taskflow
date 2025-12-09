@@ -1,7 +1,12 @@
 package com.taskflow.dto.task;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.taskflow.domain.task.Task;
+import lombok.Builder;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 public class TaskResponse {
@@ -11,17 +16,39 @@ public class TaskResponse {
     private String description;
     private String priority;
     private String status;
-    private String dueDate;
+
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dueDate;
     private Long categoryId;
 
-    public TaskResponse(Task task) {
-        this.id = task.getId();
-        this.title = task.getTitle();
-        this.description = task.getDescription();
-        this.priority = task.getPriority().toString();
-        this.status = task.getStatus();
-        this.dueDate = task.getDueDate() != null ? task.getDueDate().toString() : null;
-        this.categoryId = task.getCategory().getId();
+    @Builder
+    public TaskResponse(Long id, String title, String description, String priority, String status, LocalDateTime dueDate, Long categoryId) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.priority = priority;
+        this.status = status;
+        this.dueDate = dueDate;
+        this.categoryId = categoryId;
     }
+
+
+    public static TaskResponse from(Task task) {
+        return TaskResponse.builder()
+                .id(task.getId())
+                .title(task.getTitle())
+                .description(task.getDescription())
+                .priority(task.getPriority().toString())
+                .status(task.getStatus())
+                .dueDate(task.getDueDate() != null ? task.getDueDate() : null)
+                .categoryId(task.getCategory().getId())
+                .build();
+    }
+
+    public static List<TaskResponse> fromList(List<Task> tasks) {
+        return tasks.stream().map(TaskResponse::from).toList();
+    }
+
 
 }

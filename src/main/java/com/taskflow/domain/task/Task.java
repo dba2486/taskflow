@@ -36,7 +36,7 @@ public class Task extends BaseEntity {
     private String status;
 
     @Column(nullable = false)
-    private Boolean deleted;
+    private boolean deleted = false;
 
     // Task - User (N:1)
     @ManyToOne(fetch = FetchType.LAZY)

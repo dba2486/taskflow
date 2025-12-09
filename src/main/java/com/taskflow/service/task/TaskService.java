@@ -17,7 +17,12 @@ public interface TaskService {
     /**
      * 특정 사용자의 task 목록 조회
      */
-    List<TaskResponse> getTasks(Long userId);
+    List<TaskResponse> getTasksByUser(Long userId);
+
+    /**
+     * 특정 카테고리의 task 목록 조회
+     */
+    List<TaskResponse> getTasksByCategory(Long categoryId);
 
     /**
      * task 단건 조회

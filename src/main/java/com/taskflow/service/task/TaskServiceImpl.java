@@ -48,32 +48,40 @@ public class TaskServiceImpl implements TaskService {
 
         Task saved = taskRepository.save(task);
 
-        return new TaskResponse(saved);
+        return TaskResponse.from(saved);
     }
 
     @Override
-    public List<TaskResponse> getTasks(Long userId) {
+    public List<TaskResponse> getTasksByUser(Long userId) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        return taskRepository.findByUser(user).stream().map(TaskResponse::new).toList();
+        return TaskResponse.fromList(taskRepository.findByUserAndDeletedFalse(user));
+    }
+
+    @Override
+    public List<TaskResponse> getTasksByCategory(Long categoryId) {
+
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+        return TaskResponse.fromList(taskRepository.findByCategoryAndDeletedFalse(category));
     }
 
     @Override
     public TaskResponse getTask(Long taskId) {
 
-        Task task = taskRepository.findById(taskId)
+        Task task = taskRepository.findByIdAndDeletedFalse(taskId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 
-        return new TaskResponse(task);
+        return TaskResponse.from(task);
     }
 
     @Override
     @Transactional
     public TaskResponse updateTask(Long taskId, TaskUpdateRequest request) {
 
-        Task task = taskRepository.findById(taskId)
+        Task task = taskRepository.findByIdAndDeletedFalse(taskId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
         task.updateTask(
                 request.getTitle(),
@@ -83,13 +91,14 @@ public class TaskServiceImpl implements TaskService {
                 request.getDueDate()
         );
 
-        return new TaskResponse(task);
+        return TaskResponse.from(task);
     }
 
     @Override
     @Transactional
     public void deleteTask(Long taskId) {
-        Task task = taskRepository.findById(taskId)
+
+        Task task = taskRepository.findByIdAndDeletedFalse(taskId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 
         task.softDelete();

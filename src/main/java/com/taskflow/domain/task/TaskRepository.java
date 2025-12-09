@@ -5,11 +5,14 @@ import com.taskflow.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
+    Optional<Task> findByIdAndDeletedFalse(Long id);
 
-    List<Task> findByUser(User user);
+    List<Task> findByUserAndDeletedFalse(User user);
 
-    List<Task> findByCategory(Category category);
+    List<Task> findByCategoryAndDeletedFalse(Category category);
+
 }

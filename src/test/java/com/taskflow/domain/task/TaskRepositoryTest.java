@@ -104,7 +104,7 @@ class TaskRepositoryTest {
         taskRepository.save(task2);
 
         // when
-        List<Task> tasks = taskRepository.findByUser(user);
+        List<Task> tasks = taskRepository.findByUserAndDeletedFalse(user);
 
         // then
         assertThat(tasks).hasSize(2);
@@ -150,7 +150,7 @@ class TaskRepositoryTest {
         taskRepository.save(task2);
 
         // when
-        List<Task> tasks = taskRepository.findByCategory(category);
+        List<Task> tasks = taskRepository.findByCategoryAndDeletedFalse(category);
 
         // then
         assertThat(tasks).hasSize(2);
