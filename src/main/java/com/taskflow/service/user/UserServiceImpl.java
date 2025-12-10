@@ -7,6 +7,7 @@ import com.taskflow.dto.user.UserResponse;
 import com.taskflow.dto.user.UserUpdateRequest;
 import com.taskflow.global.exception.CustomException;
 import com.taskflow.global.exception.ErrorCode;
+import com.taskflow.service.common.EntityFinder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final EntityFinder finder;
 
     @Override
     @Transactional
@@ -40,8 +42,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse getUser(Long userId) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = finder.getUser(userId);
 
         return UserResponse.from(user);
     }
@@ -50,8 +51,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponse updateUser(Long userId, UserUpdateRequest request) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = finder.getUser(userId);
 
         // 이름 변경
         user.updateName(request.getName());
@@ -65,8 +65,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        User user = finder.getUser(userId);
+
         userRepository.delete(user);
     }
 }

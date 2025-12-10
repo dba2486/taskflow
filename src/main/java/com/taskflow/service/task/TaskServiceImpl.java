@@ -1,16 +1,13 @@
 package com.taskflow.service.task;
 
 import com.taskflow.domain.category.Category;
-import com.taskflow.domain.category.CategoryRepository;
 import com.taskflow.domain.task.Task;
 import com.taskflow.domain.task.TaskRepository;
 import com.taskflow.domain.user.User;
-import com.taskflow.domain.user.UserRepository;
 import com.taskflow.dto.task.TaskCreateRequest;
 import com.taskflow.dto.task.TaskResponse;
 import com.taskflow.dto.task.TaskUpdateRequest;
-import com.taskflow.global.exception.CustomException;
-import com.taskflow.global.exception.ErrorCode;
+import com.taskflow.service.common.EntityFinder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,18 +20,15 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
+    private final EntityFinder finder;
 
     @Override
     @Transactional
     public TaskResponse createTask(Long userId, TaskCreateRequest request) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = finder.getUser(userId);
 
-        Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+        Category category = finder.getCategory(request.getCategoryId());
 
         Task task = Task.builder()
                 .title(request.getTitle())
@@ -54,8 +48,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskResponse> getTasksByUser(Long userId) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = finder.getUser(userId);
 
         return TaskResponse.fromList(taskRepository.findByUserAndDeletedFalse(user));
     }
@@ -63,16 +56,15 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskResponse> getTasksByCategory(Long categoryId) {
 
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
+        Category category = finder.getCategory(categoryId);
+
         return TaskResponse.fromList(taskRepository.findByCategoryAndDeletedFalse(category));
     }
 
     @Override
     public TaskResponse getTask(Long taskId) {
 
-        Task task = taskRepository.findByIdAndDeletedFalse(taskId)
-                .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+        Task task = finder.getTask(taskId);
 
         return TaskResponse.from(task);
     }
@@ -81,8 +73,8 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public TaskResponse updateTask(Long taskId, TaskUpdateRequest request) {
 
-        Task task = taskRepository.findByIdAndDeletedFalse(taskId)
-                .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+        Task task = finder.getTask(taskId);
+
         task.updateTask(
                 request.getTitle(),
                 request.getDescription(),
@@ -98,8 +90,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public void deleteTask(Long taskId) {
 
-        Task task = taskRepository.findByIdAndDeletedFalse(taskId)
-                .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+        Task task = finder.getTask(taskId);
 
         task.softDelete();
     }
