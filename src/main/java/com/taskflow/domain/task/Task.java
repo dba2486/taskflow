@@ -31,9 +31,9 @@ public class Task extends BaseEntity {
     @Column(nullable = false)
     private Integer priority;
 
-    // todo or done     (Enum 고려)
-    @Column(nullable = false, length = 20)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TaskStatus status;
 
     @Column(nullable = false)
     private boolean deleted = false;
@@ -49,7 +49,7 @@ public class Task extends BaseEntity {
     private Category category;
 
 
-    public void updateTask(String title, String description, Integer priority, String status, LocalDateTime dueDate) {
+    public void updateTask(String title, String description, Integer priority, TaskStatus status, LocalDateTime dueDate) {
         this.title = title;
         this.description = description;
         this.priority = priority;

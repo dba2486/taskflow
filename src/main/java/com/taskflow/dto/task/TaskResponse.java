@@ -2,6 +2,7 @@ package com.taskflow.dto.task;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.taskflow.domain.task.Task;
+import com.taskflow.domain.task.TaskStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,7 +16,7 @@ public class TaskResponse {
     private String title;
     private String description;
     private String priority;
-    private String status;
+    private TaskStatus status;
 
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -23,7 +24,7 @@ public class TaskResponse {
     private Long categoryId;
 
     @Builder
-    public TaskResponse(Long id, String title, String description, String priority, String status, LocalDateTime dueDate, Long categoryId) {
+    public TaskResponse(Long id, String title, String description, String priority, TaskStatus status, LocalDateTime dueDate, Long categoryId) {
         this.id = id;
         this.title = title;
         this.description = description;

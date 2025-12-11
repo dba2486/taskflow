@@ -4,6 +4,7 @@ import com.taskflow.domain.category.Category;
 import com.taskflow.domain.category.CategoryRepository;
 import com.taskflow.domain.task.Task;
 import com.taskflow.domain.task.TaskRepository;
+import com.taskflow.domain.task.TaskStatus;
 import com.taskflow.domain.user.User;
 import com.taskflow.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 @Component
@@ -50,24 +50,24 @@ public class DataInitializer implements CommandLineRunner {
         categoryRepository.saveAll(Arrays.asList(category1, category2, category3, category4));
 
         // ------------- Task 생성 ---------------
-        Task task1 = Task.builder().title("과학공부").description("가계도 공부").priority(2).status("TODO")
+        Task task1 = Task.builder().title("과학공부").description("가계도 공부").priority(2).status(TaskStatus.TODO)
                 .dueDate(LocalDateTime.now().plusDays(1)).user(user1).category(category1).build();
-        Task task2 = Task.builder().title("수학공부").description("미분 공부").priority(1).status("IN_PROGRESS")
+        Task task2 = Task.builder().title("수학공부").description("미분 공부").priority(1).status(TaskStatus.IN_PROGRESS)
                 .dueDate(LocalDateTime.now().plusDays(1)).user(user1).category(category1).build();
 
-        Task task3 = Task.builder().title("웨이트 트레이닝").description("등운동").priority(2).status("DONE")
+        Task task3 = Task.builder().title("웨이트 트레이닝").description("등운동").priority(2).status(TaskStatus.DONE)
                 .dueDate(LocalDateTime.now()).user(user1).category(category2).build();
-        Task task4 = Task.builder().title("축구").description("축구 대회준비").priority(3).status("TODO")
+        Task task4 = Task.builder().title("축구").description("축구 대회준비").priority(3).status(TaskStatus.TODO)
                 .dueDate(LocalDateTime.now().plusDays(7)).user(user1).category(category2).build();
 
-        Task task5 = Task.builder().title("메이플").description("보스돌이").priority(3).status("TODO")
+        Task task5 = Task.builder().title("메이플").description("보스돌이").priority(3).status(TaskStatus.TODO)
                 .dueDate(LocalDateTime.now().plusDays(3)).user(user2).category(category3).build();
-        Task task6 = Task.builder().title("LOL").description("칼바람").priority(3).status("TODO")
+        Task task6 = Task.builder().title("LOL").description("칼바람").priority(3).status(TaskStatus.TODO)
                 .dueDate(LocalDateTime.now().plusDays(4)).user(user2).category(category3).build();
 
-        Task task7 = Task.builder().title("국내여행").description("삼척여행").priority(3).status("TODO")
+        Task task7 = Task.builder().title("국내여행").description("삼척여행").priority(3).status(TaskStatus.TODO)
                 .dueDate(LocalDateTime.now().plusDays(30)).user(user2).category(category4).build();
-        Task task8 = Task.builder().title("일본여행").description("도쿄여행").priority(3).status("TODO")
+        Task task8 = Task.builder().title("일본여행").description("도쿄여행").priority(3).status(TaskStatus.TODO)
                 .dueDate(LocalDateTime.now().plusDays(40)).user(user2).category(category4).build();
 
         taskRepository.saveAll(Arrays.asList(task1, task2, task3, task4, task5, task6, task7, task8));

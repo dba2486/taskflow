@@ -1,6 +1,7 @@
 package com.taskflow.dto.task;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.taskflow.domain.task.TaskStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -24,8 +25,8 @@ public class TaskCreateRequest {
     @NotNull(message = "우선순위는 필수입니다.")
     private Integer priority;
 
-    @NotBlank(message = "업무 상태는 필수입니다.")
-    private String status;
+    @NotNull(message = "업무 상태는 필수입니다.")
+    private TaskStatus status;
 
     @NotNull(message = "카테고리 ID는 필수입니다.")
     private Long categoryId;
