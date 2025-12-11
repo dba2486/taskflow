@@ -16,15 +16,25 @@ TaskFlow는 개인 생산성 향상을 위한 업무 관리 서비스입니다.
 - 이메일 중복 체크
 - Validation 적용
 
-### 1.2 로그인(Login)
+### 1.2 로그인(Login) — 추후 도입
 
 - JWT Access Token 발급
 - Refresh Token 발급
 - Access Token 재발급 기능
+- 현재 v0.2.0에서는 테스트용 로그인 없이 CRUD 기반 개발 진행 중
 
 ### 1.3 내 정보 조회(My Info)
 
 - 사용자 기본 정보 조회(API)
+- 현재 v0.2.0에서는 개발 편의를 위해 `/users/{id}` 조회 API를 임시 제공
+
+### 1.4 사용자 정보 수정 (Update User) — v0.2.0에서 추가
+
+- name, password 수정 가능
+
+### 1.5 사용자 삭제 (Delete User) — v0.2.0에서 추가
+
+- Hard Delete
 
 ---
 
@@ -43,9 +53,14 @@ TaskFlow는 개인 생산성 향상을 위한 업무 관리 서비스입니다.
 
 - 제목
 - 설명(optional)
-- 마감일(dueDate)
-- 우선순위(priority)
+- 마감일(dueDate) - LocalDateTime
+- 우선순위(priority) - Integer(1,2,3)
+- 상태(status) - enum(TaskStatus):
+    - TODO
+    - IN_PROGRESS
+    - DONE
 - 카테고리(optional)
+- 특정 userId에 종속
 
 ### 3.2 업무 조회(Read Tasks)
 
@@ -53,6 +68,7 @@ TaskFlow는 개인 생산성 향상을 위한 업무 관리 서비스입니다.
 - 단일 Task 조회
 - 상태(완료/미완료) 필터
 - 카테고리 기반 조회
+- Soft Delete된 Task 제외
 
 ### 3.3 업무 수정(Update Task)
 
@@ -72,7 +88,12 @@ TaskFlow는 개인 생산성 향상을 위한 업무 관리 서비스입니다.
 
 ### 4.1 카테고리 생성
 
+- name Validation
+- 특정 userId에 종속
+
 ### 4.2 카테고리 수정
+
+- name 수정가능
 
 ### 4.3 카테고리 삭제 (Task는 미분류로 이동)
 
@@ -80,7 +101,7 @@ TaskFlow는 개인 생산성 향상을 위한 업무 관리 서비스입니다.
 
 ---
 
-## 5. 검색/정렬 기능
+## 5. 검색/정렬 기능 — 추후 도입
 
 ### 5.1 검색
 
@@ -146,6 +167,7 @@ TaskFlow는 개인 생산성 향상을 위한 업무 관리 서비스입니다.
 
 # Version History
 
-| Version | Date       | Description |
-|---------|------------|-------------|
-| v0.1.0    | 2025-12-05 | 초기 기능목록 작성  |
+| Version | Date       | Description                      |
+|---------|------------|----------------------------------|
+| v0.2.0  | 2025-12-11 | Task의 status enum 반영, CRUD 기능 보완 |
+| v0.1.0  | 2025-12-05 | 초기 기능목록 작성                       |

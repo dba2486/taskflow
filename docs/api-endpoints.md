@@ -21,6 +21,8 @@ TaskFlow 프로젝트의 v0.1.0 기준 API 엔드포인트 목록입니다.
 |--------|---------------|---------------|
 | POST   | `/users`      | 회원 가입(사용자 생성) |
 | GET    | `/users/{id}` | 사용자 단건 조회     |
+| PATCH  | `/users/{id}` | 사용자 정보 수정     |
+| DELETE | `/users/{id}` | 사용자 삭제        |
 
 ---
 
@@ -61,6 +63,51 @@ TaskFlow 프로젝트의 v0.1.0 기준 API 엔드포인트 목록입니다.
   "id": 1,
   "name": "테스트사용자",
   "email": "test@example.com"
+}
+```
+
+---
+
+### 1.3 PATCH `/users/{id}` — 사용자 수정
+
+#### Path Parameter
+
+- `id`: 수정할 사용자 ID
+
+#### Request Body
+
+```json
+{
+  "name": "수정된사용자",
+  "password": "1357926"
+}
+```
+
+#### Response
+
+```json
+{
+  "id": 1,
+  "name": "수정된사용자",
+  "email": "test@example.com"
+}
+```
+
+---
+
+### 1.4 DELETE `/users/{id}` — 사용자 삭제
+
+#### Path Parameter
+
+- `id`: 삭제할 사용자 ID
+
+#### Response
+
+```json
+{
+  "success": true,
+  "data": null,
+  "error": null
 }
 ```
 
@@ -178,7 +225,9 @@ TaskFlow 프로젝트의 v0.1.0 기준 API 엔드포인트 목록입니다.
 
 ```json
 {
-  "success": true
+  "success": true,
+  "data": null,
+  "error": null
 }
 ```
 
@@ -325,7 +374,9 @@ TaskFlow 프로젝트의 v0.1.0 기준 API 엔드포인트 목록입니다.
 
 ```json
 {
-  "success": true
+  "success": true,
+  "data": null,
+  "error": null
 }
 ```
 
@@ -343,6 +394,14 @@ TaskFlow 프로젝트의 v0.1.0 기준 API 엔드포인트 목록입니다.
 ---
 
 # Version History
+
+## [v0.2.1] — 2025-12-11
+
+### Added
+
+- User 수정, 삭제 작성
+
+---
 
 ## [v0.2.0] — 2025-12-08
 

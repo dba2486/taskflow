@@ -21,7 +21,9 @@
 
 - 사용자는 이메일과 비밀번호를 입력해 계정을 생성할 수 있다.
 - 이메일은 중복 가입이 불가능하다.
+- 비밀번호는 4~100자로 입력해야한다.
 - 비밀번호는 암호화하여 저장해야 한다.
+- 회원가입 성공 시 `id, name, email` 정보를 반환한다.
 - 실패 조건:
     - 이메일 형식 오류
     - 이미 존재하는 이메일
@@ -45,6 +47,17 @@
 
 ---
 
+### **[U-04] 사용자 정보 수정**
+
+- 사용자는 자신의 이름과 비밀번호를 수정할 수 있다.
+
+---
+
+### **[U-05] 사용자 삭제**
+
+- 사용자는 자신의 계정을 삭제할 수 있다.
+- 사용자 삭제는 Hard delete를 수행한다.
+
 # 2.2 업무(Task) 기능
 
 ### **[T-01] Task 생성**
@@ -53,12 +66,19 @@
 - 필드:
     - title (필수)
     - description (선택)
-    - due_date (선택)
-    - priority (기본값: 0)
-    - category_id (선택)
+    - due_date (필수)
+    - priority (필수)
+    - status (필수)
+    - category_id (필수)
 - Task는 생성 시 자신의 user_id와 연결된다.
+- status는 enum(TaskStatus)로 관리한다.
 - 실패 조건:
     - title 미입력
+    - due_date 미입력
+    - due_date 올바르지 못한 형식으로 입력
+    - priority 미입력
+    - status 미입력
+    - category_id 미입력
     - 존재하지 않는 category_id 사용
 
 ---
@@ -66,6 +86,7 @@
 ### **[T-02] Task 목록 조회**
 
 - 사용자는 자신의 모든 Task를 조회할 수 있다.
+- soft delete된 Task는 목록에서 제외한다.
 - 기본 정렬: 생성일 내림차순(created_at DESC)
 - 추가 필터(선택):
     - category_id
@@ -78,15 +99,18 @@
 
 - 사용자는 특정 Task의 상세 정보를 조회할 수 있다.
 - 단, 자신의 Task만 조회 가능하다.
+- deleted=false 상태여야 조회 가능하다.
 
 ---
 
 ### **[T-04] Task 수정 (전체 수정)**
 
-- 사용자는 Task의 title, description, due_date, priority, category_id 등을 수정할 수 있다.
+- 사용자는 Task의 title, description, due_date, priority, status, category_id 등을 수정할 수 있다.
 - 유효성:
     - category_id가 존재해야 함
     - 수정은 자신의 Task만 가능함
+    - soft delete된 Task는 수정이 불가능하다.
+    - status는 enum 값만 허용한다.
 
 ---
 
@@ -98,10 +122,13 @@
 
 ### **[T-06] Task 상태 변경**
 
-- 사용자는 Task를 완료/미완료 상태로 변경할 수 있다.
+- 사용자는 Task를 완료/진행중/미완료 상태로 변경할 수 있다.
 - 상태 값:
     - TODO
+    - IN_PROGRESS
     - DONE
+- enum 외 값 전달 시 INVALID_REQUEST exception이 발생한다.
+-
 
 ---
 
@@ -119,7 +146,6 @@
 - 사용자는 Task를 분류하기 위한 카테고리를 생성할 수 있다.
 - 필드:
     - name (필수)
-    - color (선택)
 - 동일 사용자의 카테고리 이름 중복 허용/비허용 여부는 자유 설계  
   → 기본값: 허용
 
@@ -139,7 +165,7 @@
 
 ### **[C-04] 카테고리 수정**
 
-- 사용자는 기존 카테고리 이름/색상을 수정할 수 있다.
+- 사용자는 기존 카테고리 이름을 수정할 수 있다.
 
 ---
 
@@ -228,6 +254,7 @@ Task는 deleted 컬럼(boolean)으로 삭제 여부만 표시한다.
 
 # Version History
 
-| Version | Date       | Description    |
-|---------|------------|----------------|
-| v0.1.0    | 2025-12-05 | 초기 요구사항 정의서 작성 |
+| Version | Date       | Description                     |
+|---------|------------|---------------------------------|
+| v0.2.0  | 2025-12-11 | User/Category/Task의 기능별 요구사항 추가 |
+| v0.1.0  | 2025-12-05 | 초기 요구사항 정의서 작성                  |
