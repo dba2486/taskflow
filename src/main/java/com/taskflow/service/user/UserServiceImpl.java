@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse register(UserRegisterRequest request) {
 
         // email 중복 체크 (추가 구현 예정)
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+        if (userRepository.existByEmail(request.getEmail())) {
             throw new CustomException(ErrorCode.EMAIL_ALREADY_EXISTS);
         }
 
