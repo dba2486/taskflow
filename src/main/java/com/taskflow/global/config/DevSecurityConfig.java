@@ -6,35 +6,31 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@Profile("prod")
-public class SecurityConfig {
+@Profile("dev")
+public class DevSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                // CSRF 비활성화 (JWT 기반이므로)
                 .csrf(AbstractHttpConfigurer::disable)
 
-                // 세션 사용 안함
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // H2 Console 접근 허용
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .anyRequest().permitAll()
+                )
 
-                // 인증/인가 설정
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/auth/**", "/users")
-                                .permitAll().anyRequest().authenticated())
-
-                // 기본 로그인 / 폼 로그인 비활성화
-                .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable);
+                // iframe 허용 (H2 Console 필수)
+                .headers(headers -> headers
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
+                );
 
         return http.build();
     }
-
 }

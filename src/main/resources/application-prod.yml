@@ -1,0 +1,24 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: ${TASKFLOW_DB_URL}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${TASKFLOW_DB_USERNAME}
+    password: ${TASKFLOW_DB_PASSWORD}
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.hibernate.SQL: warn
+    org.springframework.security: INFO
