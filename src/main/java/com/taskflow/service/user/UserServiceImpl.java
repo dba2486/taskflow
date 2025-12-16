@@ -9,6 +9,7 @@ import com.taskflow.global.exception.CustomException;
 import com.taskflow.global.exception.ErrorCode;
 import com.taskflow.service.common.EntityFinder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final EntityFinder finder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -32,7 +34,7 @@ public class UserServiceImpl implements UserService {
         User user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
-                .password(request.getPassword())    // TODO: password 암호화
+                .password(passwordEncoder.encode(request.getPassword()))
                 .build();
 
         User saved = userRepository.save(user);
