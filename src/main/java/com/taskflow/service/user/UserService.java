@@ -25,4 +25,9 @@ public interface UserService {
      * 사용자 삭제
      */
     void deleteUser(Long userId);
+
+    /**
+     * 로그인한 사용자의 내 정보 조회
+     */
+    UserResponse getMyInfo(Long userId);
 }

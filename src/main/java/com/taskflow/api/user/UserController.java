@@ -7,6 +7,7 @@ import com.taskflow.global.response.ApiResponse;
 import com.taskflow.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -48,5 +49,13 @@ public class UserController {
     public ApiResponse<UserResponse> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ApiResponse.success(null);
+    }
+
+    /**
+     * 로그인한 사용자의 내 정보 조회
+     */
+    @GetMapping("/me")
+    public ApiResponse<UserResponse> getMyInfo(@AuthenticationPrincipal Long id) {
+        return ApiResponse.success(userService.getMyInfo(id));
     }
 }

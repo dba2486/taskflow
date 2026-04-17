@@ -72,4 +72,12 @@ public class UserServiceImpl implements UserService {
 
         userRepository.delete(user);
     }
+
+    @Override
+    public UserResponse getMyInfo(Long userId) {
+
+        User user = finder.getUser(userId);
+
+        return UserResponse.from(user);
+    }
 }
