@@ -10,6 +10,7 @@ import com.taskflow.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final TaskRepository taskRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -35,8 +37,8 @@ public class DataInitializer implements CommandLineRunner {
         System.out.println("더미 데이터 삽입 시작.");
 
         // ------------- User 생성 ---------------
-        User user1 = User.builder().name("김철수").email("kim@example.com").password("1234").build();
-        User user2 = User.builder().name("이영희").email("lee@example.com").password("1357").build();
+        User user1 = User.builder().name("김철수").email("kim@example.com").password(passwordEncoder.encode("1234")).build();
+        User user2 = User.builder().name("이영희").email("lee@example.com").password(passwordEncoder.encode("1357")).build();
 
         userRepository.saveAll(Arrays.asList(user1, user2));
 

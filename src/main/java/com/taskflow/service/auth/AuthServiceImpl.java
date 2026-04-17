@@ -28,7 +28,7 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         // 비밀번호 검증
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new CustomException(ErrorCode.INVALID_REQUEST);   // invalid password를 추가할 것
+            throw new CustomException(ErrorCode.INVALID_PASSWORD);
         }
         // JWT 발급
         String accessToken = jwtTokenProvider.createAccessToken(user.getId(), user.getEmail());

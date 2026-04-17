@@ -14,6 +14,7 @@ public enum ErrorCode {
     // User
     USER_NOT_FOUND("사용자를 찾을 수 없습니다."),
     EMAIL_ALREADY_EXISTS("이미 사용 중인 이메일입니다."),
+    INVALID_PASSWORD("잘못된 비밀번호입니다."),
 
     // Category
     CATEGORY_NOT_FOUND("카테고리를 찾을 수 없습니다."),

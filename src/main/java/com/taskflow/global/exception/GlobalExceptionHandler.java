@@ -66,6 +66,8 @@ public class GlobalExceptionHandler {
                  CATEGORY_NOT_FOUND,
                  TASK_NOT_FOUND -> HttpStatus.NOT_FOUND;
 
+            case INVALID_PASSWORD -> HttpStatus.UNAUTHORIZED;
+
             case EMAIL_ALREADY_EXISTS -> HttpStatus.CONFLICT;
 
             case INVALID_REQUEST -> HttpStatus.BAD_REQUEST;
