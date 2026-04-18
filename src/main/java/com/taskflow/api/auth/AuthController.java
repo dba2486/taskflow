@@ -2,6 +2,7 @@ package com.taskflow.api.auth;
 
 import com.taskflow.dto.auth.LoginRequest;
 import com.taskflow.dto.auth.LoginResponse;
+import com.taskflow.global.response.ApiResponse;
 import com.taskflow.service.auth.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class AuthController {
      * 사용자 로그인
      */
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        return ResponseEntity.ok(authService.login(request));
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(authService.login(request)));
     }
 }

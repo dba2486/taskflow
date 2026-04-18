@@ -1,5 +1,9 @@
 package com.taskflow.global.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.taskflow.global.exception.ErrorCode;
+import com.taskflow.global.response.ApiResponse;
+import com.taskflow.global.response.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
@@ -11,12 +15,16 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json;charset=UTF-8");
 
-        response.getWriter().write("{\"message\": \"인증이 필요합니다.\"}");
+        ApiResponse<?> body = ApiResponse.error(ErrorResponse.from(ErrorCode.UNAUTHORIZED));
+
+        response.getWriter().write(objectMapper.writeValueAsString(body));
     }
 }
