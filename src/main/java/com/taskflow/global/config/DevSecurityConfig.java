@@ -38,6 +38,7 @@ public class DevSecurityConfig {
                 // 인증/인가 설정
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/auth/**", "/h2-console/**").permitAll()
+                                .requestMatchers("swagger-ui/**", "v3/api-docs/**", "/swagger-ui.html").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
                                 .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
