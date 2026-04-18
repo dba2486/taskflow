@@ -20,5 +20,6 @@ server:
 
 logging:
   level:
-    org.hibernate.SQL: warn
-    org.springframework.security: INFO
+    root: INFO
+    org.hibernate.SQL: OFF
+    org.springframework.security: WARN
