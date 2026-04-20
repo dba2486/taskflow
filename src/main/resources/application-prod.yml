@@ -4,10 +4,13 @@ spring:
       on-profile: prod
 
   datasource:
-    url: ${TASKFLOW_DB_URL}
+    url: ${TASKFLOW_DB_URL}?serverTimeZone=Asia/Seoul
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${TASKFLOW_DB_USERNAME}
     password: ${TASKFLOW_DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -15,11 +18,14 @@ spring:
       ddl-auto: validate
     show-sql: false
 
+springdoc:
+  swagger-ui:
+    enabled: false
+
 server:
   port: 8080
 
 logging:
   level:
     root: INFO
-    org.hibernate.SQL: OFF
     org.springframework.security: WARN
